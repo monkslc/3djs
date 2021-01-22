@@ -1,4 +1,10 @@
-import { CUBE_EDGES, createCube, getCubeNodes, rotateCube } from "./main";
+import {
+    CUBE_FACES,
+    CUBE_EDGES,
+    createCube,
+    getCubeNodes,
+    rotateCube,
+} from "./main";
 
 const canvas = document.getElementById("3djs-playground");
 const ctx = canvas.getContext("2d");
@@ -39,12 +45,22 @@ function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let shape of shapes) {
         const nodes = getCubeNodes(shape);
-        for (let node of nodes) {
+
+        ctx.fillStyle = "rgba(100, 100, 100, 1)";
+        for (let face of CUBE_FACES) {
             ctx.beginPath();
-            ctx.arc(node[0], node[1], 3, 0, 2 * Math.PI);
+            const start = nodes[face[0]];
+            ctx.moveTo(start[0], start[1]);
+
+            for (let i = 1; i < 4; i++) {
+                ctx.lineTo(nodes[face[i]][0], nodes[face[i]][1]);
+            }
+
             ctx.fill();
         }
 
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "black";
         ctx.beginPath();
         for (let edge of CUBE_EDGES) {
             const start = nodes[edge[0]];
@@ -54,6 +70,12 @@ function render() {
             ctx.lineTo(end[0], end[1]);
         }
         ctx.stroke();
+
+        for (let node of nodes) {
+            ctx.beginPath();
+            ctx.arc(node[0], node[1], 3, 0, 2 * Math.PI);
+            ctx.fill();
+        }
     }
 }
 

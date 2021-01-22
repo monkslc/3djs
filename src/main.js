@@ -15,6 +15,15 @@ export const CUBE_EDGES = [
     [6, 7],
 ];
 
+export const CUBE_FACES = [
+    [0, 1, 5, 4],
+    [2, 3, 7, 6],
+    [4, 5, 7, 6],
+    [0, 1, 3, 2],
+    [0, 2, 6, 4],
+    [1, 3, 7, 5],
+];
+
 export function createCube(x, y, z, size) {
     const transformation = [
         [1, 0, 0, 1],
