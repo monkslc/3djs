@@ -52,8 +52,8 @@ function render() {
             const start = nodes[face[0]];
             ctx.moveTo(start[0], start[1]);
 
-            for (let i = 1; i < 4; i++) {
-                ctx.lineTo(nodes[face[i]][0], nodes[face[i]][1]);
+            for (let nodeIndex of face.slice(1)) {
+                ctx.lineTo(nodes[nodeIndex][0], nodes[nodeIndex][1]);
             }
 
             ctx.fill();
