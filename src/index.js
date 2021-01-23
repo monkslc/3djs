@@ -45,7 +45,7 @@ function render() {
     for (let shape of shapes) {
         const nodes = shape.getNodes();
 
-        ctx.fillStyle = "rgba(100, 100, 100, 1)";
+        ctx.fillStyle = "rgba(200, 100, 150, 1)";
         for (let face of shape.faces) {
             ctx.beginPath();
             const start = nodes[face[0]];
@@ -69,12 +69,6 @@ function render() {
             ctx.lineTo(end[0], end[1]);
         }
         ctx.stroke();
-
-        for (let node of nodes) {
-            ctx.beginPath();
-            ctx.arc(node[0], node[1], 3, 0, 2 * Math.PI);
-            ctx.fill();
-        }
     }
 }
 
