@@ -1,15 +1,14 @@
-import {
-    CUBE_FACES,
-    CUBE_EDGES,
-    createCube,
-    getCubeNodes,
-    rotateCube,
-} from "./main";
+import { rotateShape, createCube, createPyramid } from "./shapes";
 
 const canvas = document.getElementById("3djs-playground");
 const ctx = canvas.getContext("2d");
 
-let shapes = [createCube(400, 400, 900, 100)];
+let shapes = [
+    createCube(400, 400, 900, 100),
+    createCube(200, 100, 500, 50),
+    createPyramid(500, 100, 500, 50, 50),
+    createPyramid(800, 300, 500, 150, 150),
+];
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -28,7 +27,7 @@ canvas.onmousemove = (e) => {
     if (mouseDown) {
         const newShapes = [];
         for (let shape of shapes) {
-            const newShape = rotateCube(
+            const newShape = rotateShape(
                 shape,
                 e.movementY / 100,
                 -e.movementX / 100,
@@ -44,10 +43,10 @@ canvas.onmousemove = (e) => {
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let shape of shapes) {
-        const nodes = getCubeNodes(shape);
+        const nodes = shape.getNodes();
 
         ctx.fillStyle = "rgba(100, 100, 100, 1)";
-        for (let face of CUBE_FACES) {
+        for (let face of shape.faces) {
             ctx.beginPath();
             const start = nodes[face[0]];
             ctx.moveTo(start[0], start[1]);
@@ -62,7 +61,7 @@ function render() {
         ctx.strokeStyle = "black";
         ctx.fillStyle = "black";
         ctx.beginPath();
-        for (let edge of CUBE_EDGES) {
+        for (let edge of shape.edges) {
             const start = nodes[edge[0]];
             ctx.moveTo(start[0], start[1]);
 
