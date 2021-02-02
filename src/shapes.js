@@ -14,3 +14,4 @@ export function rotateShape(shape, x, y, z) {
 export { createPyramid } from "./pyramid";
 export { createCube } from "./cube";
 export { createCone } from "./cone";
+export { createCylinder } from "./cylinder";
