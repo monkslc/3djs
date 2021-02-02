@@ -1,4 +1,5 @@
 import { rotateShape, createCube, createPyramid, createCone } from "./shapes";
+import * as math from "mathjs";
 
 const canvas = document.getElementById("3djs-playground");
 const ctx = canvas.getContext("2d");
@@ -8,7 +9,8 @@ let shapes = [
     createCube(200, 100, 500, 50),
     createPyramid(500, 100, 500, 50, 50),
     createPyramid(800, 300, 500, 150, 150),
-    createCone(1200, 300, 500, 100, 100),
+    createCone(1200, 400, 500, 100, 100),
+    createCone(1400, 200, 100, 50, 200),
 ];
 
 function resizeCanvas() {
@@ -44,7 +46,10 @@ canvas.onmousemove = (e) => {
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let shape of shapes) {
-        const nodes = shape.getNodes();
+        const nodes = [];
+        for (let node of shape.nodes) {
+            nodes.push(math.multiply(shape.translation, shape.transformation, node));
+        }
 
         ctx.fillStyle = "rgba(200, 100, 150, 1)";
         for (let face of shape.faces) {

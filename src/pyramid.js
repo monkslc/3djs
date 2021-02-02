@@ -1,5 +1,4 @@
 import { cloneDeep } from "lodash";
-import * as math from "mathjs";
 
 import { BASE_TRANSFORMATION, translationMatrix } from "./main";
 
@@ -24,40 +23,25 @@ export const PYRAMID_EDGES = [
 
 export function createPyramid(x, y, z, baseWidth, height) {
     const transformation = cloneDeep(BASE_TRANSFORMATION);
+    const translation = translationMatrix(x, y, z);
     return {
-        baseCenter: [x, y, z],
-        baseWidth,
-        height,
         transformation,
-        getNodes: getPyramidNodes,
+        translation,
+        nodes: getOriginNodes(baseWidth, height),
         faces: PYRAMID_FACES,
         edges: PYRAMID_EDGES,
     };
 }
 
-function getPyramidNodes() {
-    const { baseCenter, baseWidth, height, transformation } = this;
-    const [x, y, z] = baseCenter;
-    const translationToPyramidCenter = translationMatrix(x, y, z);
+function getOriginNodes(baseWidth, height) {
     const halfWidth = baseWidth / 2;
     const halfHeight = height / 2;
-    const nodesAtOrigin = [
+
+    return [
         [-halfWidth, -halfHeight, -halfWidth, 1],
         [-halfWidth, -halfHeight, halfWidth, 1],
         [halfWidth, -halfHeight, halfWidth, 1],
         [halfWidth, -halfHeight, -halfWidth, 1],
         [0, halfHeight, 0, 1],
     ];
-
-    const nodes = [];
-    for (let node of nodesAtOrigin) {
-        const [newX, newY, newZ] = math.multiply(
-            translationToPyramidCenter,
-            transformation,
-            node
-        );
-        nodes.push([newX, newY, newZ]);
-    }
-
-    return nodes;
 }

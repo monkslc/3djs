@@ -3,7 +3,8 @@ import * as math from "mathjs";
 
 import { BASE_TRANSFORMATION, translationMatrix } from "./main";
 
-const NUMBER_BASE_NODES = 50;
+const NUMBER_BASE_NODES = 25;
+const radiansBetweenNodes = math.tau / NUMBER_BASE_NODES;
 
 export const FACES = [];
 export const EDGES = [];
@@ -14,41 +15,30 @@ for (let i = 0; i < NUMBER_BASE_NODES; i++) {
 
 export function createCone(x, y, z, baseRadius, height) {
     const transformation = cloneDeep(BASE_TRANSFORMATION);
+    const translation = translationMatrix(x, y, z);
     return {
-        baseCenter: [x, y, z],
-        baseRadius,
-        height,
+        nodes: getOriginNodes(baseRadius, height),
         transformation,
-        getNodes,
+        translation,
         faces: FACES,
         edges: EDGES,
     };
 }
 
-function getNodes() {
-    const { baseCenter, baseRadius, height, transformation } = this;
-    const [x, y, z] = baseCenter;
-    const translationToCenter = translationMatrix(x, y, z);
+function getOriginNodes(baseRadius, height) {
     const halfHeight = height / 2;
-    let nodesAtOrigin = [];
-    const incrementRadians = math.tau / NUMBER_BASE_NODES;
-    for (let radians = 0; radians < math.tau; radians += incrementRadians) {
+
+    const baseCenterY = -halfHeight;
+    const tip = halfHeight;
+
+    let nodes = [];
+    for (let i = 0; i < NUMBER_BASE_NODES; i++) {
+        const radians = i * radiansBetweenNodes;
         const nodeX = Math.cos(radians) * baseRadius;
         const nodeZ = Math.sin(radians) * baseRadius;
-        const nodeY = -halfHeight;
-        nodesAtOrigin.push([nodeX, nodeY, nodeZ, 1]);
+        nodes.push([nodeX, baseCenterY, nodeZ, 1]);
     }
-    nodesAtOrigin.push([0, halfHeight, 0, 1]);
-
-    const nodes = [];
-    for (let node of nodesAtOrigin) {
-        const [newX, newY, newZ] = math.multiply(
-            translationToCenter,
-            transformation,
-            node
-        );
-        nodes.push([newX, newY, newZ]);
-    }
+    nodes.push([0, tip, 0, 1]);
 
     return nodes;
 }
