@@ -1,4 +1,4 @@
-import { rotateShape, createCube, createPyramid } from "./shapes";
+import { rotateShape, createCube, createPyramid, createCone } from "./shapes";
 
 const canvas = document.getElementById("3djs-playground");
 const ctx = canvas.getContext("2d");
@@ -8,6 +8,7 @@ let shapes = [
     createCube(200, 100, 500, 50),
     createPyramid(500, 100, 500, 50, 50),
     createPyramid(800, 300, 500, 150, 150),
+    createCone(1200, 300, 500, 100, 100),
 ];
 
 function resizeCanvas() {
